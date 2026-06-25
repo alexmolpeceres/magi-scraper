@@ -6,3 +6,10 @@ __pycache__/
 # venv
 .venv/
 venv/
+# Tokens locales (NO COMMITEAR)
+.gh_token
+.tg_token
+.tg1
+.tg2
+.tg_b64
+set_secrets.py
