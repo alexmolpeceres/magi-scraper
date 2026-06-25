@@ -1,3 +1,5 @@
+# Estado del scraper (cacheado por Actions, bootstrap en repo)
+.magi_state.json
 # Python
 __pycache__/
 *.pyc
