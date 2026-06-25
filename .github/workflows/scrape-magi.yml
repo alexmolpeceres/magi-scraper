@@ -1,0 +1,46 @@
+name: Scrape MAGI Repos → Telegram
+
+on:
+  schedule:
+    # Cada 6 horas: 00:00, 06:00, 12:00, 18:00 UTC
+    - cron: "0 */6 * * *"
+  workflow_dispatch:  # Permite ejecucion manual
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install deps
+        run: pip install requests
+
+      # ── Restaurar estado previo de IDs ya enviados ──
+      - name: Restore state cache
+        id: cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .magi_state.json
+          key: magi-state-${{ github.run_id }}
+          restore-keys: |
+            magi-state-
+
+      - name: Run scraper
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python scrape_magi.py
+
+      # ── Guardar estado actualizado en cache ──
+      - name: Save state cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .magi_state.json
+          key: magi-state-${{ github.run_id }}

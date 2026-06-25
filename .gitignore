@@ -1,0 +1,8 @@
+# Estado del scraper (IDs ya enviados a Telegram)
+.magi_state.json
+# Python
+__pycache__/
+*.pyc
+# venv
+.venv/
+venv/
